@@ -42,7 +42,7 @@ public class Network {
 
             // Go through each training example
             for (int i = 0; i < data.size(); i++) {
-
+                // we want to change what data were taking in
                 double x1 = data.get(i)[0];
                 double x2 = data.get(i)[1]; 
                 double correctAnswer = answers.get(i);   
@@ -142,10 +142,33 @@ public class Network {
 
 
     public static void main(String [] args){
-        List<List<String>> allData = readCSV("Fast Food Nutrition.csv");
-        ArrayList<double[]> data = new ArrayList<double[]>();
+        List<List<String>> allData = readCSV("Big Mac Index.csv");
+        ArrayList<double[]> selectedData = new ArrayList<double[]>();
+        ArrayList<Double> answers = new ArrayList<Double>();
+
+        for(List<String> data : allData)
+        {
+            double[] tempData = {0,0};
+
+            //give a blah blah blah (Data piece 1)
+            // Dollar price
+            tempData[0] = Double.parseDouble(data.get(6)) / 6.981365125;
+            // Dollar exchange
+            tempData[1] = Double.parseDouble(data.get(5)) / 22650;
+
+            double price = Double.parseDouble(data.get(6));
+            if (price > 5.25)
+            {
+                answers.add(1.0);
+            } else {
+                answers.add(0.0);
+            }
+
+            selectedData.add(tempData);
+        }
 
         Network network = new Network();
+        network.train(selectedData, answers);
         Double prediction = network.predict(2.2, 30.5);
         System.out.println("prediction: " + prediction);
     }
